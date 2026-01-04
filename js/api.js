@@ -44,7 +44,7 @@ class APIManager {
 **Budget:** ${profile.budget}
 **Family Members:** ${familyInfo}
 **Special Considerations:** ${profile.specialNeeds || 'None'}
-**Date:** ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'day' })}
+**Date:** ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 
 Generate a plan with 1-2 stops for today. For each activity, provide:
 
