@@ -98,8 +98,16 @@ Return ONLY the JSON array, no other text.`;
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || 'Failed to generate plan');
+      const errorText = await response.text();
+      console.error('Claude API Error Response:', errorText);
+      let errorMessage = 'Failed to generate plan';
+      try {
+        const error = JSON.parse(errorText);
+        errorMessage = error.error?.message || error.message || errorText;
+      } catch (e) {
+        errorMessage = errorText;
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
