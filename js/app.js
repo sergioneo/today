@@ -265,9 +265,9 @@ class EventHandlers {
             UIManager.showProfile();
         });
 
-        // Settings button
-        document.getElementById('settingsBtn')?.addEventListener('click', () => {
-            this.showSettings();
+        // Edit profile button
+        document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+            UIManager.showProfile(true);
         });
 
         // Profile form
@@ -332,11 +332,6 @@ class EventHandlers {
     }
 
     static async handleGeneratePlan() {
-        if (!APIManager.areApisConfigured()) {
-            this.showSettings();
-            return;
-        }
-
         UIManager.showLoading(true);
 
         try {
@@ -347,38 +342,6 @@ class EventHandlers {
         } catch (error) {
             UIManager.showLoading(false);
             UIManager.showError(`Failed to generate plan: ${error.message}`);
-        }
-    }
-
-    static showSettings() {
-        const keys = StorageManager.getApiKeys();
-        const claudeKey = prompt(
-            'Enter your Claude API key:\n\n' +
-            'Get your API key from: https://console.anthropic.com/',
-            keys.claude
-        );
-
-        if (claudeKey === null) return; // User cancelled
-
-        const googleKey = prompt(
-            'Enter your Google Places API key:\n\n' +
-            'Get your API key from: https://console.cloud.google.com/',
-            keys.googlePlaces
-        );
-
-        if (googleKey === null) return; // User cancelled
-
-        if (claudeKey && googleKey) {
-            StorageManager.saveApiKeys({ claude: claudeKey, googlePlaces: googleKey });
-            APIManager.setApiKeys(claudeKey, googleKey);
-            alert('API keys saved successfully!');
-
-            // If on home screen and keys were just configured, show home again
-            if (AppState.currentScreen === 'homeScreen') {
-                UIManager.showHome();
-            }
-        } else {
-            alert('Both API keys are required to use the app.');
         }
     }
 }

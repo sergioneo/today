@@ -468,6 +468,17 @@ textarea {
     font-weight: 500;
 }
 
+/* Profile Actions */
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.profile-actions .btn {
+    gap: var(--spacing-xs);
+}
+
 /* Loading State */
 .loading-state {
     text-align: center;
