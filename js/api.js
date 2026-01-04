@@ -3,7 +3,7 @@ const API_CONFIG = {
     claude: {
         apiKey: localStorage.getItem('claudeApiKey') || '',
         endpoint: 'https://api.anthropic.com/v1/messages',
-        model: 'claude-3-5-sonnet-20241022'
+        model: 'claude-sonnet-4-20250514'
     },
     googlePlaces: {
         apiKey: localStorage.getItem('googlePlacesApiKey') || '',
