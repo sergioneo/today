@@ -36,15 +36,20 @@ class APIManager {
             `${m.name} (age ${m.age}, interests: ${m.interests})`
         ).join(', ');
 
+        const drivingText = profile.drivingDistance ? `within ${profile.drivingDistance} miles` : 'nearby';
+
         const prompt = `You are a personalized activity planner. Generate a fun, practical plan for today based on this profile:
 
 **User:** ${profile.name}
 **Interests:** ${profile.interests}
 **Location:** ${profile.location}
 **Budget:** ${profile.budget}
+**Driving Distance:** ${drivingText}
 **Family Members:** ${familyInfo}
 **Special Considerations:** ${profile.specialNeeds || 'None'}
 **Date:** ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+
+IMPORTANT: All activities must be ${drivingText} of ${profile.location}. Do not suggest anything farther away.
 
 Generate a plan with 1-2 stops for today. For each activity, provide:
 

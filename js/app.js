@@ -110,6 +110,7 @@ class UIManager {
         document.getElementById('userInterests').value = profile.interests || '';
         document.getElementById('location').value = profile.location || '';
         document.getElementById('budget').value = profile.budget || 'medium';
+        document.getElementById('drivingDistance').value = profile.drivingDistance || '15';
         document.getElementById('specialNeeds').value = profile.specialNeeds || '';
 
         // Clear existing family members
@@ -308,6 +309,7 @@ class EventHandlers {
             interests: document.getElementById('userInterests').value.trim(),
             location: document.getElementById('location').value.trim(),
             budget: document.getElementById('budget').value,
+            drivingDistance: document.getElementById('drivingDistance').value,
             specialNeeds: document.getElementById('specialNeeds').value.trim(),
             familyMembers: []
         };
