@@ -1,0 +1,31 @@
+{
+  "name": "today-family-planner",
+  "version": "1.0.0",
+  "description": "Never wonder what to do today - get personalized activity plans for your family",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -o",
+    "dev": "npx http-server -p 8000 -o",
+    "build": "echo 'This is a static PWA - no build step required'",
+    "test": "echo 'No tests configured yet'"
+  },
+  "keywords": [
+    "pwa",
+    "activity-planner",
+    "family",
+    "claude-ai",
+    "google-places"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/today.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/today/issues"
+  },
+  "homepage": "https://github.com/yourusername/today#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}

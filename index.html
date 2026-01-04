@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Never wonder what to do today - get personalized activity plans for your family">
+    <meta name="theme-color" content="#6366f1">
+    <title>Today - Family Activity Planner</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">☀️</span>
+                    <span class="logo-text">Today</span>
+                </h1>
+                <button id="settingsBtn" class="icon-btn" title="Settings">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m0-6h6m-6 0H6m12-6.364l-4.243 4.243m0 6.364l4.243 4.243m-6.364 0l4.243-4.243M6.364 6.364l4.243 4.243"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen (shown when no profile) -->
+            <div id="welcomeScreen" class="screen">
+                <div class="welcome-hero">
+                    <div class="hero-emoji">🎉</div>
+                    <h2 class="hero-title">Welcome to Today</h2>
+                    <p class="hero-subtitle">Never wonder what to do again. Get personalized activity plans for your family in seconds.</p>
+                </div>
+                <button id="createProfileBtn" class="btn btn-primary btn-large">
+                    Create Your Profile
+                </button>
+            </div>
+
+            <!-- Profile Setup Screen -->
+            <div id="profileScreen" class="screen hidden">
+                <div class="profile-header">
+                    <h2 class="section-title">Your Profile</h2>
+                    <p class="section-subtitle">Tell us about yourself and your family</p>
+                </div>
+
+                <form id="profileForm" class="profile-form">
+                    <div class="form-section">
+                        <h3 class="form-section-title">About You</h3>
+
+                        <div class="form-group">
+                            <label for="userName">Your Name</label>
+                            <input type="text" id="userName" placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userInterests">Your Interests</label>
+                            <input type="text" id="userInterests" placeholder="e.g., hiking, music, photography">
+                            <small>Separate with commas</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" placeholder="City or ZIP code" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="budget">Typical Budget (per person)</label>
+                            <select id="budget">
+                                <option value="low">Budget-Friendly ($)</option>
+                                <option value="medium" selected>Moderate ($$)</option>
+                                <option value="high">Premium ($$$)</option>
+                                <option value="luxury">Luxury ($$$$)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Family Members</h3>
+                        <div id="familyMembers"></div>
+                        <button type="button" id="addFamilyMemberBtn" class="btn btn-secondary">
+                            + Add Family Member
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="form-section-title">Additional Details</h3>
+                        <div class="form-group">
+                            <label for="specialNeeds">Special Considerations</label>
+                            <textarea id="specialNeeds" rows="3" placeholder="e.g., accessibility needs, dietary restrictions, pet-friendly"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            Save Profile
+                        </button>
+                        <button type="button" id="cancelProfileBtn" class="btn btn-ghost">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Home Screen (shown when profile exists) -->
+            <div id="homeScreen" class="screen hidden">
+                <div class="home-hero">
+                    <h2 class="greeting" id="greeting"></h2>
+                    <p class="tagline">What should we do today?</p>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">👨‍👩‍👧‍👦</div>
+                        <div class="stat-value" id="familyCount">-</div>
+                        <div class="stat-label">Family Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📍</div>
+                        <div class="stat-value" id="locationDisplay">-</div>
+                        <div class="stat-label">Location</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="budgetDisplay">-</div>
+                        <div class="stat-label">Budget</div>
+                    </div>
+                </div>
+
+                <button id="generatePlanBtn" class="btn btn-primary btn-large btn-generate">
+                    <span class="btn-icon">✨</span>
+                    <span>Generate Today's Plan</span>
+                </button>
+
+                <div id="loadingState" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Crafting your perfect day...</p>
+                </div>
+            </div>
+
+            <!-- Plan Display Screen -->
+            <div id="planScreen" class="screen hidden">
+                <div class="plan-header">
+                    <button id="backToHomeBtn" class="btn btn-ghost btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
+                    </button>
+                    <button id="regeneratePlanBtn" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                        </svg>
+                        New Plan
+                    </button>
+                </div>
+
+                <div class="plan-title">
+                    <h2 id="planTitle">Your Plan for Today</h2>
+                    <p id="planSummary"></p>
+                </div>
+
+                <div id="planActivities" class="activities-grid"></div>
+            </div>
+        </main>
+
+        <!-- Install Prompt -->
+        <div id="installPrompt" class="install-prompt hidden">
+            <div class="install-content">
+                <span>📱 Install Today for quick access</span>
+                <button id="installBtn" class="btn btn-small">Install</button>
+                <button id="dismissInstallBtn" class="btn btn-ghost btn-small">Not now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Family Member Template -->
+    <template id="familyMemberTemplate">
+        <div class="family-member-card">
+            <div class="family-member-header">
+                <h4 class="family-member-title">Family Member</h4>
+                <button type="button" class="remove-member-btn" title="Remove">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="member-name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" class="member-age" placeholder="Age" min="0" max="120">
+            </div>
+            <div class="form-group">
+                <label>Interests</label>
+                <input type="text" class="member-interests" placeholder="e.g., sports, art, reading">
+            </div>
+        </div>
+    </template>
+
+    <!-- Activity Card Template -->
+    <template id="activityCardTemplate">
+        <div class="activity-card">
+            <div class="activity-image">
+                <img src="" alt="" class="activity-photo">
+                <div class="activity-badge"></div>
+            </div>
+            <div class="activity-content">
+                <div class="activity-header">
+                    <h3 class="activity-title"></h3>
+                    <div class="activity-rating">
+                        <span class="rating-stars">⭐</span>
+                        <span class="rating-value"></span>
+                    </div>
+                </div>
+                <p class="activity-description"></p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <span class="detail-text"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">⏱️</span>
+                        <span class="detail-text"></span>
+                    </div>
+                </div>
+                <div class="activity-recommendation hidden">
+                    <div class="recommendation-badge">👨‍🍳 Chef's Pick</div>
+                    <p class="recommendation-text"></p>
+                </div>
+                <div class="activity-actions">
+                    <button class="btn btn-primary view-location-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        View Location
+                    </button>
+                    <button class="btn btn-secondary get-tickets-btn hidden">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 0 0-2 2v3a2 2 0 1 1 0 4v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 1 1 0-4V7a2 2 0 0 0-2-2H5z"></path>
+                        </svg>
+                        Get Tickets
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
