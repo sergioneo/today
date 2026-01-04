@@ -27,5 +27,7 @@
   },
   "homepage": "https://github.com/yourusername/today#readme",
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
 }
