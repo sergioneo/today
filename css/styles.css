@@ -678,6 +678,105 @@ textarea {
     min-width: 140px;
 }
 
+/* Rating System */
+.plan-rating {
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.rating-question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.rating-question-small {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+.rating-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+}
+
+.rating-buttons-small {
+    gap: var(--spacing-sm);
+}
+
+.rating-btn {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--bg-hover);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-btn svg {
+    transition: all var(--transition-base);
+}
+
+.rating-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.rating-btn.rating-dislike:hover,
+.rating-btn.rating-dislike.active {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+}
+
+.rating-btn.rating-dislike.active svg,
+.rating-btn.rating-dislike:hover svg {
+    stroke: var(--danger);
+    fill: rgba(239, 68, 68, 0.2);
+}
+
+.rating-btn.rating-like:hover,
+.rating-btn.rating-like.active {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--success);
+}
+
+.rating-btn.rating-like.active svg,
+.rating-btn.rating-like:hover svg {
+    stroke: var(--success);
+    fill: rgba(16, 185, 129, 0.2);
+}
+
+.rating-btn.rating-love:hover,
+.rating-btn.rating-love.active {
+    background: rgba(236, 72, 153, 0.2);
+    border-color: var(--secondary);
+}
+
+.rating-btn.rating-love.active svg,
+.rating-btn.rating-love:hover svg {
+    stroke: var(--secondary);
+    fill: rgba(236, 72, 153, 0.2);
+}
+
+.activity-user-rating {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--bg-tertiary);
+}
+
 /* Install Prompt */
 .install-prompt {
     position: fixed;

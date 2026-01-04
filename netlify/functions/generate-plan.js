@@ -32,6 +32,21 @@ exports.handler = async (event, context) => {
 
     const drivingText = profile.drivingDistance ? `within ${profile.drivingDistance} miles` : 'nearby';
 
+    // Build preferences section
+    let preferencesText = '';
+    if (profile.preferences) {
+      const prefs = profile.preferences;
+      if (prefs.lovedActivities && prefs.lovedActivities.length > 0) {
+        preferencesText += `\n**Really Loved Activities:** ${prefs.lovedActivities.join(', ')}`;
+      }
+      if (prefs.likedActivities && prefs.likedActivities.length > 0) {
+        preferencesText += `\n**Liked Activities:** ${prefs.likedActivities.join(', ')}`;
+      }
+      if (prefs.dislikedActivities && prefs.dislikedActivities.length > 0) {
+        preferencesText += `\n**Disliked Activities:** ${prefs.dislikedActivities.join(', ')}`;
+      }
+    }
+
     const prompt = `You are a personalized activity planner. Generate a fun, practical plan for today based on this profile:
 
 **User:** ${profile.name}
@@ -41,9 +56,10 @@ exports.handler = async (event, context) => {
 **Driving Distance:** ${drivingText}
 **Family Members:** ${familyInfo}
 **Special Considerations:** ${profile.specialNeeds || 'None'}
-**Date:** ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+**Date:** ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}${preferencesText}
 
 IMPORTANT: All activities must be ${drivingText} of ${profile.location}. Do not suggest anything farther away.
+${preferencesText ? '\nIMPORTANT: Pay close attention to past preferences. Suggest MORE activities similar to what they loved and liked. AVOID activities similar to what they disliked.' : ''}
 
 Generate a plan with 1-2 stops for today. For each activity, provide:
 

@@ -39,6 +39,65 @@ class StorageManager {
     }
 }
 
+// Rating Manager
+class RatingManager {
+    static RATINGS_KEY = 'today_ratings';
+
+    static saveRating(type, name, rating) {
+        const ratings = this.getAllRatings();
+
+        if (!ratings[type]) {
+            ratings[type] = {};
+        }
+
+        ratings[type][name] = {
+            rating: rating,
+            timestamp: new Date().toISOString()
+        };
+
+        localStorage.setItem(this.RATINGS_KEY, JSON.stringify(ratings));
+    }
+
+    static getAllRatings() {
+        const data = localStorage.getItem(this.RATINGS_KEY);
+        return data ? JSON.parse(data) : { plans: {}, activities: {} };
+    }
+
+    static getPreferencesSummary() {
+        const ratings = this.getAllRatings();
+        const summary = {
+            likedActivities: [],
+            lovedActivities: [],
+            dislikedActivities: [],
+            likedPlans: 0,
+            dislikedPlans: 0
+        };
+
+        // Analyze activity ratings
+        if (ratings.activities) {
+            Object.entries(ratings.activities).forEach(([name, data]) => {
+                if (data.rating === 'love') {
+                    summary.lovedActivities.push(name);
+                } else if (data.rating === 'like') {
+                    summary.likedActivities.push(name);
+                } else if (data.rating === 'dislike') {
+                    summary.dislikedActivities.push(name);
+                }
+            });
+        }
+
+        // Count plan ratings
+        if (ratings.plans) {
+            Object.values(ratings.plans).forEach(data => {
+                if (data.rating === 'like') summary.likedPlans++;
+                else if (data.rating === 'dislike') summary.dislikedPlans++;
+            });
+        }
+
+        return summary;
+    }
+}
+
 // Screen Manager
 class ScreenManager {
     static show(screenId) {
@@ -153,9 +212,29 @@ class UIManager {
         document.getElementById('planSummary').textContent =
             `We've crafted ${activities.length} special ${activities.length === 1 ? 'stop' : 'stops'} for your day`;
 
+        // Setup plan rating listeners
+        this.setupPlanRatingListeners();
+
         for (const activity of activities) {
             await this.createActivityCard(activity, container);
         }
+    }
+
+    static setupPlanRatingListeners() {
+        const planRatingButtons = document.querySelectorAll('.plan-rating .rating-btn');
+        planRatingButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const rating = btn.dataset.rating;
+                const planId = new Date().toISOString().split('T')[0]; // Use date as plan ID
+
+                // Update UI
+                planRatingButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Save rating
+                RatingManager.saveRating('plans', planId, rating);
+            });
+        });
     }
 
     static async createActivityCard(activity, container) {
@@ -235,6 +314,21 @@ class UIManager {
                 window.open(ticketUrl, '_blank');
             });
         }
+
+        // Activity rating listeners
+        const activityRatingButtons = clone.querySelectorAll('.activity-user-rating .rating-btn');
+        activityRatingButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const rating = btn.dataset.rating;
+
+                // Update UI
+                activityRatingButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Save rating
+                RatingManager.saveRating('activities', activity.name, rating);
+            });
+        });
 
         container.appendChild(clone);
     }
@@ -335,7 +429,13 @@ class EventHandlers {
         UIManager.showLoading(true);
 
         try {
-            const activities = await APIManager.generatePlan(AppState.profile);
+            // Include preferences in profile
+            const profileWithPreferences = {
+                ...AppState.profile,
+                preferences: RatingManager.getPreferencesSummary()
+            };
+
+            const activities = await APIManager.generatePlan(profileWithPreferences);
             AppState.currentPlan = activities;
             UIManager.showLoading(false);
             UIManager.showPlan(activities);
