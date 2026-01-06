@@ -51,6 +51,14 @@ class APIManager {
 
 IMPORTANT: All activities must be ${drivingText} of ${profile.location}. Do not suggest anything farther away.
 
+CRITICAL - GEOGRAPHIC COHERENCE: All suggested activities must be in the SAME GENERAL AREA or along a logical route. DO NOT suggest activities that require backtracking or driving in opposite directions. For example, if suggesting 2 stops, they should be:
+- In the same neighborhood/district, OR
+- Along a natural route (e.g., both north, both along the coast, both in downtown)
+- Total driving between ALL stops should be reasonable (under 30 minutes total if possible)
+- NEVER suggest going 20 miles south then 20 miles north - keep it geographically sensible
+
+${preferencesText ? '\nIMPORTANT: Pay close attention to past preferences. Suggest MORE activities similar to what they loved and liked. AVOID activities similar to what they disliked.' : ''}
+
 Generate a plan with 1-2 stops for today. For each activity, provide:
 
 1. **Type** (restaurant, activity, event, or attraction)
