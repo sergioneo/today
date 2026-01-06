@@ -370,25 +370,40 @@ class UIManager {
                 step.classList.remove('active', 'completed');
             });
 
-            // Animate through steps
+            // Animate through steps, but stop before the last one
             let currentStep = 0;
+            const maxAutoStep = steps.length - 1; // Stop before last step
+
             const animateStep = () => {
                 if (currentStep > 0) {
                     steps[currentStep - 1].classList.remove('active');
                     steps[currentStep - 1].classList.add('completed');
                 }
 
-                if (currentStep < steps.length) {
+                if (currentStep < maxAutoStep) {
                     steps[currentStep].classList.add('active');
                     currentStep++;
                     setTimeout(animateStep, 600);
+                } else if (currentStep === maxAutoStep) {
+                    // Start the last step but leave it pulsing
+                    steps[currentStep].classList.add('active');
                 }
             };
 
             animateStep();
         } else {
-            loadingState.classList.add('hidden');
-            generateBtn.classList.remove('hidden');
+            // Complete the final step before hiding
+            const steps = loadingState.querySelectorAll('.loading-step');
+            steps.forEach(step => {
+                step.classList.remove('active');
+                step.classList.add('completed');
+            });
+
+            // Small delay to show completion, then hide
+            setTimeout(() => {
+                loadingState.classList.add('hidden');
+                generateBtn.classList.remove('hidden');
+            }, 300);
         }
     }
 
