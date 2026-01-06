@@ -137,6 +137,11 @@
                         <div class="stat-value" id="budgetDisplay">-</div>
                         <div class="stat-label">Budget</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚗</div>
+                        <div class="stat-value" id="drivingDisplay">-</div>
+                        <div class="stat-label">Max Drive</div>
+                    </div>
                 </div>
 
                 <div class="profile-actions">
@@ -155,8 +160,28 @@
                 </button>
 
                 <div id="loadingState" class="loading-state hidden">
-                    <div class="spinner"></div>
-                    <p class="loading-text">Crafting your perfect day...</p>
+                    <div class="loading-steps">
+                        <div class="loading-step" data-step="1">
+                            <div class="step-icon">✓</div>
+                            <span class="step-text">Analyzing preferences</span>
+                        </div>
+                        <div class="loading-step" data-step="2">
+                            <div class="step-icon">✓</div>
+                            <span class="step-text">Finding attractions</span>
+                        </div>
+                        <div class="loading-step" data-step="3">
+                            <div class="step-icon">✓</div>
+                            <span class="step-text">Discovering events</span>
+                        </div>
+                        <div class="loading-step" data-step="4">
+                            <div class="step-icon">✓</div>
+                            <span class="step-text">Selecting restaurants</span>
+                        </div>
+                        <div class="loading-step" data-step="5">
+                            <div class="step-icon">✓</div>
+                            <span class="step-text">Crafting your perfect day</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -182,6 +207,8 @@
                     <p id="planSummary"></p>
                 </div>
 
+                <div id="planActivities" class="activities-grid"></div>
+
                 <div class="plan-rating">
                     <p class="rating-question">How do you feel about this plan?</p>
                     <div class="rating-buttons">
@@ -197,8 +224,6 @@
                         </button>
                     </div>
                 </div>
-
-                <div id="planActivities" class="activities-grid"></div>
             </div>
         </main>
 

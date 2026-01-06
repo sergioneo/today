@@ -162,6 +162,17 @@ class UIManager {
             luxury: '$$$$'
         };
         document.getElementById('budgetDisplay').textContent = budgetLabels[profile.budget] || '$$';
+
+        // Update driving distance
+        const drivingDistance = profile.drivingDistance || '15';
+        const drivingLabels = {
+            '5': '5 mi',
+            '15': '15 mi',
+            '30': '30 mi',
+            '60': '60 mi',
+            '100': '100+ mi'
+        };
+        document.getElementById('drivingDisplay').textContent = drivingLabels[drivingDistance] || '15 mi';
     }
 
     static populateProfileForm(profile) {
@@ -340,6 +351,29 @@ class UIManager {
         if (show) {
             loadingState.classList.remove('hidden');
             generateBtn.classList.add('hidden');
+
+            // Reset all steps
+            const steps = loadingState.querySelectorAll('.loading-step');
+            steps.forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+
+            // Animate through steps
+            let currentStep = 0;
+            const animateStep = () => {
+                if (currentStep > 0) {
+                    steps[currentStep - 1].classList.remove('active');
+                    steps[currentStep - 1].classList.add('completed');
+                }
+
+                if (currentStep < steps.length) {
+                    steps[currentStep].classList.add('active');
+                    currentStep++;
+                    setTimeout(animateStep, 600);
+                }
+            };
+
+            animateStep();
         } else {
             loadingState.classList.add('hidden');
             generateBtn.classList.remove('hidden');
