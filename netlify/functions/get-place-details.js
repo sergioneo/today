@@ -21,12 +21,17 @@ exports.handler = async (event, context) => {
   try {
     const { searchQuery } = JSON.parse(event.body);
 
+    console.log('Searching for place:', searchQuery);
+
     // Search for the place
     const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchQuery)}&key=${GOOGLE_PLACES_API_KEY}`;
     const searchResponse = await fetch(searchUrl);
     const searchData = await searchResponse.json();
 
+    console.log('Google Places search status:', searchData.status);
+
     if (searchData.status !== 'OK' || !searchData.results.length) {
+      console.log('No results found for:', searchQuery);
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -41,6 +46,9 @@ exports.handler = async (event, context) => {
     if (place.photos && place.photos.length > 0) {
       const photoReference = place.photos[0].photo_reference;
       photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${photoReference}&key=${GOOGLE_PLACES_API_KEY}`;
+      console.log('Found photo for:', place.name);
+    } else {
+      console.log('No photos available for:', place.name);
     }
 
     // Get detailed info

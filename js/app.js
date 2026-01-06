@@ -264,11 +264,23 @@ class UIManager {
 
         // Set photo
         const photo = clone.querySelector('.activity-photo');
+
+        // Always set a fallback first
+        photo.src = APIManager.getFallbackPhoto(activity.type);
+
+        // Try to load Google Places photo if available
         if (placeDetails?.photoUrl) {
-            photo.src = placeDetails.photoUrl;
-        } else {
-            photo.src = APIManager.getFallbackPhoto(activity.type);
+            const img = new Image();
+            img.onload = () => {
+                photo.src = placeDetails.photoUrl;
+            };
+            img.onerror = () => {
+                console.log('Google photo failed to load, using fallback');
+                // Fallback already set above
+            };
+            img.src = placeDetails.photoUrl;
         }
+
         photo.alt = activity.name;
 
         // Set badge

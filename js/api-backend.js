@@ -59,16 +59,17 @@ class APIManager {
         }
     }
 
-    // Generate fallback photo URL using Unsplash
+    // Generate fallback photo using picsum.photos (reliable, no CORS issues)
     static getFallbackPhoto(type) {
-        const queries = {
-            restaurant: 'restaurant-food',
-            activity: 'outdoor-activity',
-            event: 'event-concert',
-            attraction: 'tourist-attraction'
+        // Use different seed numbers for different types to get varied images
+        const seeds = {
+            restaurant: 1,
+            activity: 2,
+            event: 3,
+            attraction: 4
         };
-        const query = queries[type] || 'activity';
-        return `https://source.unsplash.com/800x600/?${query}`;
+        const seed = seeds[type] || Math.floor(Math.random() * 100);
+        return `https://picsum.photos/seed/${seed}/800/600`;
     }
 
     // Get ticket search URL
